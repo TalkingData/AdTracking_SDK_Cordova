@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-talkingdata-adtracking" 
+        version="1.0.0">
+    
+    <name>TalkingData-AdTracking</name>
+    
+    <js-module src="www/TalkingDataAppCpa.js" name="TalkingDataAppCpa">
+        <clobbers target="TalkingDataAppCpa" />
+    </js-module>
+    <js-module src="www/TalkingDataOrder.js" name="TalkingDataOrder">
+        <clobbers target="TalkingDataOrder" />
+    </js-module>
+    <js-module src="www/TalkingDataShoppingCart.js" name="TalkingDataShoppingCart">
+        <clobbers target="TalkingDataShoppingCart" />
+    </js-module>
+    
+    <!-- ios -->
+    <platform name="ios">
+    
+        <header-file src="src/ios/TalkingDataAppCpaPlugin.h" />
+        <source-file src="src/ios/TalkingDataAppCpaPlugin.m" />
+        <header-file src="src/ios/TalkingDataAppCpa.h" />
+        <source-file src="src/ios/libTalkingDataAppCpa.a" framework="true" />
+        
+        <config-file target="config.xml" parent="/widget/plugins">
+            <feature name="TalkingDataAppCpa">
+                <param name="ios-package" value="TalkingDataAppCpaPlugin"/>
+            </feature>
+        </config-file>
+        
+        <framework src="CoreMotion.framework" />
+        <framework src="SystemConfiguration.framework" />
+        <framework src="Security.framework" />
+        <framework src="CFNetwork.framework" />
+        <framework src="CoreTelephony.framework" />
+        <framework src="AdSupport.framework" />
+        <framework src="libz.tbd" />
+        <framework src="libc++.tbd" />
+        
+    </platform>
+    
+    <!-- android -->
+    <platform name="android">
+        
+        <source-file src="src/android/AdTracking.jar" target-dir="app/src/main/libs" />
+        <source-file src="src/android/TalkingDataAppCpaPlugin.java" target-dir="src/com/talkingdata/adtracking" />
+        
+        <config-file target="res/xml/config.xml" parent="/widget/plugins">
+            <feature name="TalkingDataAppCpa">
+                <param name="android-package" value="com.talkingdata.adtracking.TalkingDataAppCpaPlugin"/>
+            </feature>
+        </config-file>
+        
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        </config-file>
+        
+    </platform>
+    
+</plugin>
