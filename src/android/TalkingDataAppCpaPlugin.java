@@ -22,23 +22,35 @@ import java.util.Map;
 
 
 public class TalkingDataAppCpaPlugin extends CordovaPlugin {
-	private Context ctx;
+    private Context ctx;
 
-	@Override
-	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-		super.initialize(cordova, webView);
-		this.ctx = cordova.getActivity().getApplicationContext();
-	}
-	
-	@Override
-	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-		if ("init".equals(action)) {
-			String appKey = args.getString(0);
-			String channelId = args.getString(1);
-			TalkingDataAppCpa.init(ctx, appKey, channelId);
-			return true;
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        this.ctx = cordova.getActivity().getApplicationContext();
+    }
+    
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if ("init".equals(action)) {
+            // 初始化 TalkingData AdTracking SDK
+            String appId = args.getString(0);
+            String channelId = args.getString(1);
+            TalkingDataAppCpa.init(ctx, appId, channelId);
+            return true;
         } else if ("setVerboseLogDisable".equals(action)) {
+            // 关闭在LogCat中打印运行日志
             TalkingDataAppCpa.setVerboseLogDisable();
+            return true;
+        } else if ("getDeviceId".equals(action)) {
+            // 获取 TalkingData Device Id，并将其作为参数传入 JS 的回调函数
+            String deviceId = TalkingDataAppCpa.getDeviceId(ctx);
+            callbackContext.success(deviceId);
+            return true;
+        } else if ("onReceiveDeepLink".equals(action)) {
+            // DeepLink事件
+            String link = args.getString(0);
+            TalkingDataAppCpa.onReceiveDeepLink(link);
             return true;
         } else if ("onRegister".equals(action)) {
             // 注册事件
@@ -50,42 +62,19 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             String accountId = args.getString(0);
             TalkingDataAppCpa.onLogin(accountId);
             return true;
-		} else if ("onCreateRole".equals(action)){
-		    String roleName = args.getString(0);
-		    TalkingDataAppCpa.onCreateRole(roleName);
-		    return true;
+        } else if ("onCreateRole".equals(action)) {
+            // 创建角色
+            String roleName = args.getString(0);
+            TalkingDataAppCpa.onCreateRole(roleName);
+            return true;
         } else if ("onPay".equals(action)) {
-		    String accountId = args.getString(0);
-		    String orderId = args.getString(1);
-		    int amount = args.getInt(2);
-		    String currencyType = args.getString(3);
-		    TalkingDataAppCpa.onPay(accountId, orderId, amount, currencyType);
-        } else if ("onPayWithPayType".equals(action)) {
+            // 支付
             String accountId = args.getString(0);
             String orderId = args.getString(1);
             int amount = args.getInt(2);
             String currencyType = args.getString(3);
             String payType = args.getString(4);
             TalkingDataAppCpa.onPay(accountId, orderId, amount, currencyType, payType);
-
-        } else if ("onPayWithOrder".equals(action)) {
-            String accountId = args.getString(0);
-            String orderId = args.getString(1);
-            int amount = args.getInt(2);
-            String currencyType = args.getString(3);
-            String payType = args.getString(4);
-            String orderStr = args.getString(5);
-            Order order = stringToOrder(orderStr);
-            TalkingDataAppCpa.onPay(accountId, orderId, amount, currencyType, payType, order);
-        } else if ("onPayWithItem".equals(action)) {
-            String accountId = args.getString(0);
-            String orderId = args.getString(1);
-            int amount = args.getInt(2);
-            String currencyType = args.getString(3);
-            String payType = args.getString(4);
-            String itemId = args.getString(5);
-            int itemCount = args.getInt(6);
-            TalkingDataAppCpa.onPay(accountId, orderId, amount, currencyType, payType, itemId, itemCount);
         } else if ("onPlaceOrder".equals(action)) {
             // 下单
             String accountId = args.getString(0);
@@ -125,17 +114,8 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             ShoppingCart shoppingCart = this.stringToShoppingCart(shoppingCartStr);
             TalkingDataAppCpa.onViewShoppingCart(shoppingCart);
             return true;
-		} else if ("getDeviceId".equals(action)) {
-			// 获取 TalkingData Device Id，并将其作为参数传入 JS 的回调函数
-			String deviceId = TalkingDataAppCpa.getDeviceId(ctx);
-			callbackContext.success(deviceId);
-			return true;
-		} else if ("onReceiveDeepLink".equals(action)) {
-            // 查看购物车
-            String link = args.getString(0);
-            TalkingDataAppCpa.onReceiveDeepLink(link);
-            return true;
         } else if (action.startsWith("onCustEvent")) {
+            // 触发自定义事件
             try {
                 Method onCustEvent = TalkingDataAppCpa.class.getDeclaredMethod(action);
                 onCustEvent.invoke(null);
@@ -148,27 +128,8 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
                 e.printStackTrace();
             }
         }
-		return false;
-	}
-    
-	private Map<String, Object> toMap(String jsonStr) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			JSONObject jsonObj = new JSONObject(jsonStr);
-			Iterator<String> keys = jsonObj.keys();
-			String key = null;
-			Object value = null;
-			while (keys.hasNext())
-			{
-				key = keys.next();
-				value = jsonObj.get(key);
-				result.put(key, value);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+        return false;
+    }
     
     private Order stringToOrder(String orderStr) {
         try {

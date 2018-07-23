@@ -1,6 +1,6 @@
 //
-//  TalkingDataPlugin.m
-//  TalkingData_PhoneGap
+//  TalkingDataAppCpaPlugin.m
+//  TalkingDataAppCpa_Cordova
 //
 //  Created by liweiqiang on 13-12-2.
 //
@@ -9,101 +9,38 @@
 #import "TalkingDataAppCpaPlugin.h"
 #import "TalkingDataAppCpa.h"
 
-@interface TalkingDataAppCpaPlugin ()
-
-#if __has_feature(objc_arc)
-@property (nonatomic, strong) NSString *currPageName;
-#else
-@property (nonatomic, retain) NSString *currPageName;
-#endif
-
-@end
 
 @implementation TalkingDataPluginAppCpa
 
-#if __has_feature(objc_arc)
-#else
-- (void)dealloc {
-    [super dealloc];
-    [self.currPageName release];
-}
-#endif
-
-- (NSDictionary *)jsonToDictionary:(NSString *)jsonStr {
-    if (jsonStr) {
-        NSError* error = nil;
-        id object = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
-        if (error == nil && [object isKindOfClass:[NSDictionary class]]) {
-            return object;
-        }
-    }
-    
-    return nil;
-}
-
 - (void)init:(CDVInvokedUrlCommand*)command {
-    NSString *appKey = [command.arguments objectAtIndex:0];
-    if (appKey == nil || [appKey isKindOfClass:[NSNull class]]) {
+    NSString *appId = [command.arguments objectAtIndex:0];
+    if (appId == nil || [appId isKindOfClass:[NSNull class]]) {
         return;
     }
     NSString *channelId = [command.arguments objectAtIndex:1];
     if ([channelId isKindOfClass:[NSNull class]]) {
         channelId = nil;
     }
-    [TalkingData sessionStarted:appKey withChannelId:channelId];
+    [TalkingDataAppCpa inti:appId withChannelId:channelId];
+}
+
+- (void)setVerboseLogDisable:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa setVerboseLogDisabled];
 }
 
 - (void)getDeviceId:(CDVInvokedUrlCommand*)command {
-    NSString *deviceId = [TalkingData getDeviceID];
+    NSString *deviceId = [TalkingDataAppCpa getDeviceId];
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:deviceId];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (void)setExceptionReportEnability:(CDVInvokedUrlCommand*)command {
-    NSString *arg0 = [command.arguments objectAtIndex:0];
-    if (arg0 == nil || [arg0 isKindOfClass:[NSNull class]]) {
-        return;
+- (void)onReceiveDeepLink:(CDVInvokedUrlCommand*)command {
+    NSString *link = [command.arguments objectAtIndex:0];
+    if (![link isKindOfClass:[NSString class]]) {
+        link = nil;
     }
-    BOOL enabled = [arg0 boolValue];
-    [TalkingData setExceptionReportEnabled:enabled];
-}
-
-- (void)setSignalReportEnability:(CDVInvokedUrlCommand*)command {
-    NSString *arg0 = [command.arguments objectAtIndex:0];
-    if (arg0 == nil || [arg0 isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    BOOL enabled = [arg0 boolValue];
-    [TalkingData setSignalReportEnabled:enabled];
-}
-
-- (void)setLocation:(CDVInvokedUrlCommand*)command {
-    NSString *arg0 = [command.arguments objectAtIndex:0];
-    NSString *arg1 = [command.arguments objectAtIndex:1];
-    if (arg0 == nil || [arg0 isKindOfClass:[NSNull class]] || arg1 == nil || [arg1 isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    double latitude = [arg0 doubleValue];
-    double longitude = [arg1 doubleValue];
-    [TalkingData setLatitude:latitude longitude:longitude];
-}
-
-- (void)setAntiCheatingEnabled:(CDVInvokedUrlCommand*)command {
-    NSString *arg0 = [command.arguments objectAtIndex:0];
-    if (arg0 == nil || [arg0 isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    BOOL enabled = [arg0 boolValue];
-    [TalkingData setAntiCheatingEnabled:enabled];
-}
-
-- (void)setLogEnability:(CDVInvokedUrlCommand*)command {
-    NSString *arg0 = [command.arguments objectAtIndex:0];
-    if (arg0 == nil || [arg0 isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    BOOL enabled = [arg0 boolValue];
-    [TalkingData setLogEnabled:enabled];
+    NSURL *url = [NSURL URLWithString:link];
+    [TalkingDataAppCpa onReceiveDeepLink:url];
 }
 
 - (void)onRegister:(CDVInvokedUrlCommand*)command {
@@ -111,12 +48,7 @@
     if (![accountId isKindOfClass:[NSString class]]) {
         accountId == nil;
     }
-    NSUInteger type = [[command.arguments objectAtIndex:1] unsignedIntegerValue];
-    NSString *name = [command.arguments objectAtIndex:2];
-    if (![name isKindOfClass:[NSString class]]) {
-        name = nil;
-    }
-    [TalkingData onRegister:accountId type:type name:name];
+    [TalkingDataAppCpa onRegister:accountId];
 }
 
 - (void)onLogin:(CDVInvokedUrlCommand*)command {
@@ -124,49 +56,36 @@
     if (![accountId isKindOfClass:[NSString class]]) {
         accountId == nil;
     }
-    NSUInteger type = [[command.arguments objectAtIndex:1] unsignedIntegerValue];
-    NSString *name = [command.arguments objectAtIndex:2];
-    if (![name isKindOfClass:[NSString class]]) {
-        name = nil;
-    }
-    [TalkingData onLogin:accountId type:type name:name];
+    [TalkingDataAppCpa onLogin:accountId];
 }
 
-- (void)onEvent:(CDVInvokedUrlCommand*)command {
-    NSString *eventId = [command.arguments objectAtIndex:0];
-    if (eventId == nil || [eventId isKindOfClass:[NSNull class]]) {
-        return;
+- (void)onCreateRole:(CDVInvokedUrlCommand*)command {
+    NSString *roleName = [command.arguments objectAtIndex:0];
+    if (![roleName isKindOfClass:[NSString class]]) {
+        roleName = nil;
     }
-    [TalkingData trackEvent:eventId];
+    [TalkingDataAppCpa onCreateRole:roleName];
 }
 
-- (void)onEventWithLabel:(CDVInvokedUrlCommand*)command {
-    NSString *eventId = [command.arguments objectAtIndex:0];
-    if (eventId == nil || [eventId isKindOfClass:[NSNull class]]) {
-        return;
+- (void)onPay:(CDVInvokedUrlCommand*)command {
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
     }
-    NSString *eventLabel = [command.arguments objectAtIndex:1];
-    if ([eventLabel isKindOfClass:[NSNull class]]) {
-        eventLabel = nil;
+    NSString *orderId = [command.arguments objectAtIndex:1];
+    if (![orderId isKindOfClass:[NSString class]]) {
+        orderId = nil;
     }
-    [TalkingData trackEvent:eventId label:eventLabel];
-}
-
-- (void)onEventWithParameters:(CDVInvokedUrlCommand*)command {
-    NSString *eventId = [command.arguments objectAtIndex:0];
-    if (eventId == nil || [eventId isKindOfClass:[NSNull class]]) {
-        return;
+    int amount = [[command.arguments objectAtIndex:2] intValue];
+    NSString *currencyType = [command.arguments objectAtIndex:3];
+    if (![currencyType isKindOfClass:[NSString class]]) {
+        currencyType = nil;
     }
-    NSString *eventLabel = [command.arguments objectAtIndex:1];
-    if ([eventLabel isKindOfClass:[NSNull class]]) {
-        eventLabel = nil;
+    NSString *payType = [command.arguments objectAtIndex:4];
+    if (![payType isKindOfClass:[NSString class]]) {
+        payType = nil;
     }
-    NSDictionary *parameters = nil;
-    NSString *parametersJson = [command.arguments objectAtIndex:2];
-    if (![parametersJson isKindOfClass:[NSNull class]]) {
-        parameters = [self jsonToDictionary:parametersJson];
-    }
-    [TalkingData trackEvent:eventId label:eventLabel parameters:parameters];
+    [TalkingDataAppCpa onPay:accountId withOrderId:orderId withAmount:amount withCurrencyType:currencyType withPayType:payType];
 }
 
 - (void)onPlaceOrder:(CDVInvokedUrlCommand*)command {
@@ -178,8 +97,8 @@
     if (![orderStr isKindOfClass:[NSString class]]) {
         orderStr = nil;
     }
-    TalkingDataOrder *order = [self stringToOrder:orderStr];
-    [TalkingData onPlaceOrder:accountId order:order];
+    TDOrder *order = [self stringToOrder:orderStr];
+    [TalkingDataAppCpa onPlaceOrder:accountId withOrder:order];
 }
 
 - (void)onOrderPaySucc:(CDVInvokedUrlCommand*)command {
@@ -187,16 +106,20 @@
     if (![accountId isKindOfClass:[NSString class]]) {
         accountId = nil;
     }
-    NSString *payType = [command.arguments objectAtIndex:1];
+    NSString *orderId = [command.arguments objectAtIndex:1];
+    if (![orderId isKindOfClass:[NSString class]]) {
+        orderId = nil;
+    }
+    int amount = [[command.arguments objectAtIndex:2] intValue];
+    NSString *currencyType = [command.arguments objectAtIndex:3];
+    if (![currencyType isKindOfClass:[NSString class]]) {
+        currencyType = nil;
+    }
+    NSString *payType = [command.arguments objectAtIndex:4];
     if (![payType isKindOfClass:[NSString class]]) {
         payType = nil;
     }
-    NSString *orderStr = [command.arguments objectAtIndex:2];
-    if (![orderStr isKindOfClass:[NSString class]]) {
-        orderStr = nil;
-    }
-    TalkingDataOrder *order = [self stringToOrder:orderStr];
-    [TalkingData onOrderPaySucc:accountId payType:payType order:order];
+    [TalkingDataAppCpa onOrderPaySucc:accountId withOrderId:orderId withAmount:amount withCurrencyType:currencyType withPayType:payType];
 }
 
 - (void)onViewItem:(CDVInvokedUrlCommand*)command {
@@ -213,7 +136,7 @@
         name = nil;
     }
     int unitPrice = [[command.arguments objectAtIndex:3] intValue];
-    [TalkingData onViewItem:itemId category:category name:name unitPrice:unitPrice];
+    [TalkingDataAppCpa onViewItemWithCategory:category itemId:itemId name:name unitPrice:unitPrice];
 }
 
 - (void)onAddItemToShoppingCart:(CDVInvokedUrlCommand*)command {
@@ -231,7 +154,7 @@
     }
     int unitPrice = [[command.arguments objectAtIndex:3] intValue];
     int amount = [[command.arguments objectAtIndex:4] intValue];
-    [TalkingData onAddItemToShoppingCart:itemId category:category name:name unitPrice:unitPrice amount:amount];
+    [TalkingDataAppCpa onAddItemToShoppingCartWithCategory:category itemId:itemId name:name unitPrice:unitPrice amount:amount];
 }
 
 - (void)onViewShoppingCart:(CDVInvokedUrlCommand*)command {
@@ -239,61 +162,82 @@
     if (!shoppingCartStr || ![shoppingCartStr isKindOfClass:[NSString class]]) {
         return;
     }
-    TalkingDataShoppingCart *shoppingCart = [self stringToShoppingCart:shoppingCartStr];
-    [TalkingData onViewShoppingCart:shoppingCart];
+    TDShoppingCart *shoppingCart = [self stringToShoppingCart:shoppingCartStr];
+    [TalkingDataAppCpa onViewShoppingCart:shoppingCart];
 }
 
-- (void)onPage:(CDVInvokedUrlCommand*)command {
-    NSString *pageName = [command.arguments objectAtIndex:0];
-    if (pageName == nil || [pageName isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    
-    if (self.currPageName) {
-        [TalkingData trackPageEnd:self.currPageName];
-    }
-    self.currPageName = pageName;
-    [TalkingData trackPageBegin:self.currPageName];
+- (void)onCustEvent1:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent1];
 }
 
-- (void)onPageBegin:(CDVInvokedUrlCommand*)command {
-    NSString *pageName = [command.arguments objectAtIndex:0];
-    if (pageName == nil || [pageName isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    self.currPageName = pageName;
-    [TalkingData trackPageBegin:self.currPageName];
+- (void)onCustEvent2:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent2];
 }
 
-- (void)onPageEnd:(CDVInvokedUrlCommand*)command {
-    NSString *pageName = [command.arguments objectAtIndex:0];
-    if (pageName == nil || [pageName isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    [TalkingData trackPageEnd:pageName];
-    self.currPageName = nil;
+- (void)onCustEvent3:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent3];
 }
 
-- (TalkingDataOrder *)stringToOrder:(NSString *)orderStr {
+- (void)onCustEvent4:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent4];
+}
+
+- (void)onCustEvent5:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent5];
+}
+
+- (void)onCustEvent6:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent6];
+}
+
+- (void)onCustEvent7:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent7];
+}
+
+- (void)onCustEvent8:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent8];
+}
+
+- (void)onCustEvent9:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent9];
+}
+
+- (void)onCustEvent10:(CDVInvokedUrlCommand*)command {
+    [TalkingDataAppCpa onCustEvent10];
+}
+
+- (TDOrder *)stringToOrder:(NSString *)orderStr {
     NSDictionary *orderDic = [self jsonToDictionary:orderStr];
-    TalkingDataOrder *order = [TalkingDataOrder createOrder:orderDic[@"orderId"] total:[orderDic[@"total"] intValue] currencyType:orderDic[@"currencyType"]];
+    TDOrder *order = [TDOrder orderWithOrderId:orderDic[@"orderId"] total:[orderDic[@"total"] intValue] currencyType:orderDic[@"currencyType"]];
     NSArray *items = orderDic[@"items"];
     for (NSDictionary *item in items) {
-        [order addItem:item[@"itemId"] category:item[@"category"] name:item[@"name"] unitPrice:[item[@"unitPrice"] intValue] amount:[item[@"amount"] intValue]];
+        [order addItemWithCategory:item[@"category"] itemId:item[@"itemId"] name:item[@"name"] unitPrice:[item[@"unitPrice"] intValue] amount:[item[@"amount"] intValue]];
     }
     
     return order;
 }
 
-- (TalkingDataShoppingCart *)stringToShoppingCart:(NSString *)shoppingCartStr {
+- (TDShoppingCart *)stringToShoppingCart:(NSString *)shoppingCartStr {
     NSDictionary *shoppingCartDic = [self jsonToDictionary:shoppingCartStr];
-    TalkingDataShoppingCart *shoppingCart = [TalkingDataShoppingCart createShoppingCart];
+    TDShoppingCart *shoppingCart = [TDShoppingCart createShoppingCart];
     NSArray *items = shoppingCartDic[@"items"];
     for (NSDictionary *item in items) {
-        [shoppingCart addItem:item[@"itemId"] category:item[@"category"] name:item[@"name"] unitPrice:[item[@"unitPrice"] intValue] amount:[item[@"amount"] intValue]];
+        [shoppingCart addItemWithCategory:item[@"category"] itemId:item[@"itemId"] name:item[@"name"] unitPrice:[item[@"unitPrice"] intValue] amount:[item[@"amount"] intValue]];
     }
     
     return shoppingCart;
+}
+
+- (NSDictionary *)jsonToDictionary:(NSString *)jsonStr {
+    if (jsonStr) {
+        NSError* error = nil;
+        id object = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+        if (error == nil && [object isKindOfClass:[NSDictionary class]]) {
+            return object;
+        }
+    }
+    
+    return nil;
 }
 
 @end

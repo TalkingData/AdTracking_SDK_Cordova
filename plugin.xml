@@ -9,11 +9,11 @@
     <js-module src="www/TalkingDataAppCpa.js" name="TalkingDataAppCpa">
         <clobbers target="TalkingDataAppCpa" />
     </js-module>
-    <js-module src="www/TalkingDataOrder.js" name="TalkingDataOrder">
-        <clobbers target="TalkingDataOrder" />
+    <js-module src="www/TDOrder.js" name="TDOrder">
+        <clobbers target="TDOrder" />
     </js-module>
-    <js-module src="www/TalkingDataShoppingCart.js" name="TalkingDataShoppingCart">
-        <clobbers target="TalkingDataShoppingCart" />
+    <js-module src="www/TDShoppingCart.js" name="TDShoppingCart">
+        <clobbers target="TDShoppingCart" />
     </js-module>
     
     <!-- ios -->
