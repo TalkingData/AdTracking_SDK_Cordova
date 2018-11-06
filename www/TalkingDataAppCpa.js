@@ -69,7 +69,6 @@ var TalkingDataAppCpa = {
     // currencyType : 币种
     // payType      : 支付类型
     onOrderPaySucc:function(accountId, orderId, amount, currencyType, payType) {
-        var orderJson = JSON.stringify(order);
         exec(null, null, "TalkingDataAppCpa", "onOrderPaySucc", [accountId, orderId, amount, currencyType, payType]);
     },
 
