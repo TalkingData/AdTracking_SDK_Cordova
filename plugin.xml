@@ -44,7 +44,7 @@
     <!-- android -->
     <platform name="android">
         
-        <source-file src="src/android/AdTracking.jar" target-dir="app/src/main/libs" />
+        <source-file src="src/android/AdTracking.jar" target-dir="libs" />
         <source-file src="src/android/TalkingDataAppCpaPlugin.java" target-dir="src/com/talkingdata/adtracking" />
         
         <config-file target="res/xml/config.xml" parent="/widget/plugins">
