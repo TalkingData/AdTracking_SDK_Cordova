@@ -10,7 +10,7 @@
 #import "TalkingDataAppCpa.h"
 
 
-@implementation TalkingDataPluginAppCpa
+@implementation TalkingDataAppCpaPlugin
 
 - (void)init:(CDVInvokedUrlCommand*)command {
     NSString *appId = [command.arguments objectAtIndex:0];
@@ -21,7 +21,7 @@
     if ([channelId isKindOfClass:[NSNull class]]) {
         channelId = nil;
     }
-    [TalkingDataAppCpa inti:appId withChannelId:channelId];
+    [TalkingDataAppCpa init:appId withChannelId:channelId];
 }
 
 - (void)setVerboseLogDisable:(CDVInvokedUrlCommand*)command {
