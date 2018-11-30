@@ -10,4 +10,4 @@ AD Tracking Cordova 平台 SDK 由`封装层`和`Native SDK`两部分构成，�
 	将最新的 .jar 文件复制到 `src/android` 目录下
 	- iOS 平台  
 	将最新的 .a 文件复制到 `src/ios` 目录下
-4. 将 Cordova SDK 集成您需要统计的工程中，并按 [集成文档](http://doc.talkingdata.com/posts/35) 进行必要配置和功能调用。
+4. 将 Cordova SDK 集成您需要统计的工程中，并按 [集成文档](http://doc.talkingdata.com/posts/860) 进行必要配置和功能调用。
