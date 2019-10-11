@@ -146,7 +146,164 @@ var TalkingDataAppCpa = {
     // 触发自定义事件10
     onCustEvent10: function() {
         exec(null, null, "TalkingDataAppCpa", "onCustEvent10", []);
-    }
+    },
+
+    /**
+     * 专属-交易事件
+     * @param {String} accountId 
+     * @param {Object} transaction 
+     */
+    onTransaction: function(accountId, transaction) {
+        var t = JSON.stringify(transaction);
+        exec(null, null, "TalkingDataAppCpa", "onTransaction", [accountId, t]);
+    },
+
+    /**
+     * 专属-授信
+     * @param {String} accountId 
+     * @param {Number} amount 
+     * @param {String} content 
+     */
+    onCredit: function(accountId, amount, content) {
+        exec(null, null, "TalkingDataAppCpa", "onCredit", [accountId, amount, content]);
+    },
+    /**
+     * 收藏
+     * @param {*} category 
+     * @param {*} content 
+     */
+    onFavorite: function(category, content) {
+        exec(null, null, "TalkingDataAppCpa", "onFavorite", [category, content]);
+    },
+    /**
+     * 分享
+     * @param {*} accountId 
+     * @param {*} content 
+     */
+    onShare: function(accountId, content) {
+        exec(null, null, "TalkingDataAppCpa", "onShare", [accountId, content]);
+    },
+    /**
+     * 签到打卡
+     * @param {*} accountId 
+     * @param {*} punchId 
+     */
+    onPunch: function(accountId, punchId) {
+        exec(null, null, "TalkingDataAppCpa", "onPunch", [accountId, punchId]);
+    },
+    /**
+     * 预约
+     * @param {*} accountId 
+     * @param {*} reservationId 
+     * @param {*} category 
+     * @param {*} amount 
+     * @param {*} term 
+     */
+    onReservation: function(accountId, reservationId, category, amount, term) {
+        exec(null, null, "TalkingDataAppCpa", "onReservation", [accountId, reservationId, category, amount, term]);
+    },
+    /**
+     * 预定
+     */
+    onBooking: function(accountId, bookingId, category, amount, content) {
+        exec(null, null, "TalkingDataAppCpa", "onBooking", [accountId, bookingId, category, amount, content]);        
+    },
+    /**
+     * 联系
+     * @param {*} accountId 
+     * @param {*} content 
+     */
+    onContact: function(accountId, content) {
+        exec(null, null, "TalkingDataAppCpa", "onContact", [accountId, content]);        
+    },
+    /**
+     * 课程学习
+     * @param {String} accountId 
+     * @param {String} course 
+     * @param {Number} begin 
+     * @param {Number} duration 
+     */
+    onLearn: function(accountId, course, begin, duration) {
+        exec(null, null, "TalkingDataAppCpa", "onLearn", [accountId, course, begin, duration]);        
+    },
+    /**
+     * 文章阅读
+     * @param {*} accountId 
+     * @param {*} book 
+     * @param {*} begin 
+     * @param {*} duration 
+     */
+    onRead: function(accountId, book, begin, duration) {
+        exec(null, null, "TalkingDataAppCpa", "onRead", [accountId, book, begin, duration]);       
+    },
+    /**
+     * 专属-浏览详情
+     * @param {*} accountId 
+     * @param {*} content 
+     * @param {*} begin 
+     * @param {*} duration 
+     */
+    onBrowse: function(accountId, content, begin, duration){
+        exec(null, null, "TalkingDataAppCpa", "onBrowse", [accountId, content, begin, duration]);       
+    },
+    /**
+     * 专属-退单
+     * @param {*} accountId 
+     * @param {*} orderId 
+     * @param {*} reason 
+     * @param {*} type 
+     */
+    onChargeBack: function(accountId, orderId, reason, type) {
+        exec(null, null, "TalkingDataAppCpa", "onChargeBack", [accountId, orderId, reason, type]);       
+    },
+    /**
+     * 专属-完成使用体验
+     * @param {*} accountId 
+     * @param {*} content 
+     */
+    onTrialFinished: function(accountId, content){
+        exec(null, null, "TalkingDataAppCpa", "onTrialFinished", [accountId, content]);       
+    },
+    /**
+     * 完成新手教程
+     * @param {*} accountId 
+     * @param {*} content 
+     */
+    onGuideFinished: function(accountId, content) {
+        exec(null, null, "TalkingDataAppCpa", "onGuideFinished", [accountId, content]);       
+    },
+    /**
+     * 完成课程试听
+     * @param {*} accountId 
+     * @param {*} content 
+     */
+    onPreviewFinished: function(accountId, content) {
+        exec(null, null, "TalkingDataAppCpa", "onPreviewFinished", [accountId, content]);       
+    },
+    /**
+     * 完成免费阅读
+     * @param {*} accountId 
+     * @param {*} content 
+     */
+    onFreeFinished: function(accountId, content) {
+        exec(null, null, "TalkingDataAppCpa", "onFreeFinished", [accountId, content]);       
+    },
+    /**
+     * 通过关卡
+     * @param {*} accountId 
+     * @param {*} levelId 
+     */
+    onLevelPass: function(accountId, levelId) {
+        exec(null, null, "TalkingDataAppCpa", "onLevelPass", [accountId, levelId]);       
+    },
+    /**
+     * 成就
+     * @param {*} accountId 
+     * @param {*} achievementId 
+     */
+    onAchievementUnlock: function(accountId, achievementId) {
+        exec(null, null, "TalkingDataAppCpa", "onAchievementUnlock", [accountId, achievementId]);       
+    },
 };
 
 module.exports = TalkingDataAppCpa;

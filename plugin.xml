@@ -15,6 +15,9 @@
     <js-module src="www/TDShoppingCart.js" name="TDShoppingCart">
         <clobbers target="TDShoppingCart" />
     </js-module>
+        <js-module src="www/TDTransaction.js" name="TDTransaction">
+        <clobbers target="TDTransaction" />
+    </js-module>
     
     <!-- ios -->
     <platform name="ios">
