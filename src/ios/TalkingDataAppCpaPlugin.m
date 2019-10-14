@@ -240,4 +240,325 @@
     return nil;
 }
 
+
+
+- (TDTransaction *)stringToTransaction:(NSString *)orderStr {
+    NSDictionary *transactionDict = [self jsonToDictionary:orderStr];
+    TDTransaction * transaction = [[TDTransaction alloc]init];
+    transaction.transactionId = transactionDict[@"transactionId"];
+    transaction.category = transactionDict[@"category"];
+    transaction.amount = [transactionDict[@"amount"]intValue];
+    transaction.personA = transactionDict[@"personA"];
+    transaction.personB = transactionDict[@"personB"];
+    transaction.startDate = [transactionDict[@"startDate"] intValue];
+    transaction.endDate = [transactionDict[@"endDate"] intValue];
+    transaction.currencyType = transactionDict[@"currencyType"];
+    transaction.content = transactionDict[@"content"];
+    
+    return transaction;
+}
+
+- (void)onTransaction:(CDVInvokedUrlCommand*)command{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    NSString *transactionStr = [command.arguments objectAtIndex:1];
+    TDTransaction * t = [self stringToTransaction:transactionStr];
+    [TalkingDataAppCpa onTransaction:transactionStr transaction:t];
+}
+
+- (void)onCredit:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    int amount = [[command.arguments objectAtIndex:1]intValue];
+
+    NSString *content = [command.arguments objectAtIndex:2];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    [TalkingDataAppCpa onCredit:accountId amount:amount content:content];
+}
+
+- (void)onFavorite:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    [TalkingDataAppCpa onFavorite:accountId content:content];
+}
+
+- (void)onShare:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    [TalkingDataAppCpa onShare:accountId content:content];
+}
+
+- (void)onPunch:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *punchId = [command.arguments objectAtIndex:1];
+    if (![punchId isKindOfClass:[NSString class]]) {
+        punchId = nil;
+    }
+    [TalkingDataAppCpa onPunch:accountId punchId:punchId];
+}
+
+- (void)onReservation:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *reservationId = [command.arguments objectAtIndex:1];
+    if (![reservationId isKindOfClass:[NSString class]]) {
+        reservationId = nil;
+    }
+    
+    NSString *category = [command.arguments objectAtIndex:2];
+    if (![category isKindOfClass:[NSString class]]) {
+        category = nil;
+    }
+    
+    int amount = [[command.arguments objectAtIndex:3]intValue];
+
+    NSString *term = [command.arguments objectAtIndex:4];
+    if (![term isKindOfClass:[NSString class]]) {
+        term = nil;
+    }
+    [TalkingDataAppCpa onReservation:accountId reservationId:reservationId category:category amount:amount term:term];
+}
+
+- (void)onBooking:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *bookingId = [command.arguments objectAtIndex:1];
+    if (![bookingId isKindOfClass:[NSString class]]) {
+        bookingId = nil;
+    }
+    
+    NSString *category = [command.arguments objectAtIndex:2];
+    if (![category isKindOfClass:[NSString class]]) {
+        category = nil;
+    }
+    
+    int amount = [[command.arguments objectAtIndex:3]intValue];
+    
+    NSString *content = [command.arguments objectAtIndex:4];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    
+    [TalkingDataAppCpa onBooking:accountId bookingId:bookingId category:category amount:amount content:content];
+}
+
+- (void)onContact:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+
+    [TalkingDataAppCpa onContact:accountId content:content];
+}
+
+
+- (void)onLearn:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *course = [command.arguments objectAtIndex:1];
+    if (![course isKindOfClass:[NSString class]]) {
+        course = nil;
+    }
+    
+    int64_t begin = [[command.arguments objectAtIndex:2] integerValue];
+    int duration = [[command.arguments objectAtIndex:3] intValue];
+
+    [TalkingDataAppCpa onLearn:accountId course:course begin:begin duration:duration];
+}
+
+- (void)onRead:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *book = [command.arguments objectAtIndex:1];
+    if (![book isKindOfClass:[NSString class]]) {
+        book = nil;
+    }
+    
+    int64_t begin = [[command.arguments objectAtIndex:2] integerValue];
+    int duration = [[command.arguments objectAtIndex:3] intValue];
+    
+    [TalkingDataAppCpa onRead:accountId book:book begin:begin duration:duration];
+}
+
+- (void)onBrowse:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    
+    int64_t begin = [[command.arguments objectAtIndex:2] integerValue];
+    int duration = [[command.arguments objectAtIndex:3] intValue];
+    
+    [TalkingDataAppCpa onBrowse:accountId content:content begin:begin duration:duration];
+}
+
+- (void)onChargeBack:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *orderId = [command.arguments objectAtIndex:1];
+    if (![orderId isKindOfClass:[NSString class]]) {
+        orderId = nil;
+    }
+    
+    NSString *reason = [command.arguments objectAtIndex:1];
+    if (![reason isKindOfClass:[NSString class]]) {
+        reason = nil;
+    }
+    
+    NSString *type = [command.arguments objectAtIndex:1];
+    if (![type isKindOfClass:[NSString class]]) {
+        type = nil;
+    }
+    
+    [TalkingDataAppCpa onChargeBack:accountId orderId:orderId reason:reason type:type];
+}
+
+
+- (void)onTrailFinished:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    [TalkingDataAppCpa onTrialFinished:accountId content:content];
+}
+
+- (void)onGuideFinished:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    [TalkingDataAppCpa onGuideFinished:accountId content:content];
+}
+
+- (void)onPreviewFinished:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    [TalkingDataAppCpa onPreviewFinished:accountId content:content];
+}
+
+
+- (void)onFreeFinished:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *content = [command.arguments objectAtIndex:1];
+    if (![content isKindOfClass:[NSString class]]) {
+        content = nil;
+    }
+    [TalkingDataAppCpa onFreeFinished:accountId content:content];
+}
+
+//通过关卡
+- (void)onLevelPass:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *levelId = [command.arguments objectAtIndex:1];
+    if (![levelId isKindOfClass:[NSString class]]) {
+        levelId = nil;
+    }
+    [TalkingDataAppCpa onLevelPass:accountId levelId:levelId];
+}
+
+//成就
+- (void)onAchievementUnlock:(CDVInvokedUrlCommand*)command
+{
+    NSString *accountId = [command.arguments objectAtIndex:0];
+    if (![accountId isKindOfClass:[NSString class]]) {
+        accountId = nil;
+    }
+    
+    NSString *achievementId = [command.arguments objectAtIndex:1];
+    if (![achievementId isKindOfClass:[NSString class]]) {
+        achievementId = nil;
+    }
+    [TalkingDataAppCpa onAchievementUnlock:accountId achievementId:achievementId];
+}
+
 @end

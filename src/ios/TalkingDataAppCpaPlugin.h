@@ -122,4 +122,58 @@
 // 触发自定义事件10
 - (void)onCustEvent10:(CDVInvokedUrlCommand*)command;
 
+//交易事件
+- (void)onTransaction:(CDVInvokedUrlCommand*)command;
+
+//专属-授信
+- (void)onCredit:(CDVInvokedUrlCommand*)command;
+
+//收藏
+- (void)onFavorite:(CDVInvokedUrlCommand*)command;
+
+//分享
+- (void)onShare:(CDVInvokedUrlCommand*)command;
+
+//签到
+- (void)onPunch:(CDVInvokedUrlCommand*)command;
+
+//预约
+- (void)onReservation:(CDVInvokedUrlCommand*)command;
+
+//预定
+- (void)onBooking:(CDVInvokedUrlCommand*)command;
+
+//预定
+- (void)onContact:(CDVInvokedUrlCommand*)command;
+
+//课程学习
+- (void)onLearn:(CDVInvokedUrlCommand*)command;
+
+//文章阅读
+- (void)onRead:(CDVInvokedUrlCommand*)command;
+
+//专属 浏览详情
+- (void)onBrowse:(CDVInvokedUrlCommand*)command;
+
+//专属-退单
+- (void)onChargeBack:(CDVInvokedUrlCommand*)command;
+
+//专属-完成使用体验
+- (void)onTrailFinished:(CDVInvokedUrlCommand*)command;
+
+//完成新手教程
+- (void)onGuideFinished:(CDVInvokedUrlCommand*)command;
+
+//完成新手教程
+- (void)onPreviewFinished:(CDVInvokedUrlCommand*)command;
+
+//完成免费阅读
+- (void)onFreeFinished:(CDVInvokedUrlCommand*)command;
+
+//通过关卡
+- (void)onLevelPass:(CDVInvokedUrlCommand*)command;
+
+//成就
+- (void)onAchievementUnlock:(CDVInvokedUrlCommand*)command;
+
 @end
