@@ -48,7 +48,14 @@
     if (![accountId isKindOfClass:[NSString class]]) {
         accountId == nil;
     }
-    [TalkingDataAppCpa onRegister:accountId];
+    NSString * invivateCode = nil;
+    if (command.arguments.count >= 2) {
+        invivateCode = [command.arguments objectAtIndex:1];
+        if (![invivateCode isKindOfClass:[NSString class]]) {
+            invivateCode == nil;
+        }
+    }
+    [TalkingDataAppCpa onRegister:accountId invitationCode:invivateCode];
 }
 
 - (void)onLogin:(CDVInvokedUrlCommand*)command {
