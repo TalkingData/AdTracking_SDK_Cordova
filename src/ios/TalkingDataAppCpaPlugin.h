@@ -41,6 +41,9 @@
 // accountId    : 帐号ID
 - (void)onLogin:(CDVInvokedUrlCommand*)command;
 
+//创建卡片
+- (void)onCreateCard:(CDVInvokedUrlCommand*)command;
+
 // 创建角色
 // command 中的值：
 // roleName     : 角色名称
