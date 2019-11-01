@@ -265,6 +265,18 @@
     return nil;
 }
 
+- (TDSearch *)stringToSearch:(NSString *)orderStr {
+    NSDictionary *transactionDict = [self jsonToDictionary:orderStr];
+    TDSearch * search = [[TDSearch alloc]init];
+    search.category = transactionDict[@"category"];
+    search.content = transactionDict[@"content"];
+    search.itemLocationId = transactionDict[@"itemLocationId"];
+    search.destination = transactionDict[@"destination"];
+    search.origin = transactionDict[@"origin"];
+    search.startDate = [transactionDict[@"startDate"] intValue];
+    search.endDate = [transactionDict[@"endDate"] intValue];
+    return transaction;
+}
 
 
 - (TDTransaction *)stringToTransaction:(NSString *)orderStr {
@@ -348,6 +360,13 @@
         punchId = nil;
     }
     [TalkingDataAppCpa onPunch:accountId punchId:punchId];
+}
+
+- (void)onSearch:(CDVInvokedUrlCommand*)command
+{
+    NSString *searchString = [command.arguments objectAtIndex:0];
+    TDSearch * s = [self stringToSearch:searchString];
+    [TalkingDataAppCpa onSearch:s];
 }
 
 - (void)onReservation:(CDVInvokedUrlCommand*)command

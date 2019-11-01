@@ -140,6 +140,9 @@
 //签到
 - (void)onPunch:(CDVInvokedUrlCommand*)command;
 
+//广告搜索
+- (void)onSearch:(CDVInvokedUrlCommand*)command;
+
 //预约
 - (void)onReservation:(CDVInvokedUrlCommand*)command;
 
