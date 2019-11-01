@@ -21,7 +21,14 @@
     if ([channelId isKindOfClass:[NSNull class]]) {
         channelId = nil;
     }
-    [TalkingDataAppCpa init:appId withChannelId:channelId];
+    NSString * customString = nil;
+    if (command.arguments.count >= 3) {
+        customString = [command.arguments objectAtIndex:2];
+        if (![customString isKindOfClass:[NSString class]]) {
+            customString == nil;
+        }
+    }
+    [TalkingDataAppCpa init:appId withChannelId:channelId custom:customString];
 }
 
 - (void)setVerboseLogDisable:(CDVInvokedUrlCommand*)command {
