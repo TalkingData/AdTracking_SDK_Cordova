@@ -147,7 +147,8 @@ var TalkingDataAppCpa = {
     },
 
     onSearch: function(search){
-        exec(null, null,  "TalkingDataAppCpa", "onSearch", [search]);
+        var s = JSON.stringify(search);
+        exec(null, null,  "TalkingDataAppCpa", "onSearch", [s]);
     },
 
     /**
