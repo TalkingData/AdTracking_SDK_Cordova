@@ -265,7 +265,7 @@
     }
     NSString *transactionStr = [command.arguments objectAtIndex:1];
     TDTransaction * t = [self stringToTransaction:transactionStr];
-    [TalkingDataAppCpa onTransaction:transactionStr transaction:t];
+    [TalkingDataAppCpa onTransaction:accountId transaction:t];
 }
 
 - (void)onCredit:(CDVInvokedUrlCommand*)command
