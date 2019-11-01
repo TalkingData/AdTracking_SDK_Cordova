@@ -32,13 +32,7 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if ("init".equals(action)) {
-            // 初始化 TalkingData AdTracking SDK
-            String appId = args.getString(0);
-            String channelId = args.getString(1);
-            TalkingDataAppCpa.init(ctx, appId, channelId);
-            return true;
-        } else if ("setVerboseLogDisable".equals(action)) {
+        if ("setVerboseLogDisable".equals(action)) {
             // 关闭在LogCat中打印运行日志
             TalkingDataAppCpa.setVerboseLogDisable();
             return true;
