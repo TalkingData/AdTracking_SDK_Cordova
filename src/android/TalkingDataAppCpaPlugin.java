@@ -132,6 +132,12 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
+        } else if (action.startsWith("onCreateCard")){
+            String accountId = args.getString(0);
+            String method = args.getString(1);
+            String content = args.getString(2);
+            TalkingDataAppCpa.onCreateCard(accountId, method, content);
+            return true;
         } else if (action.startsWith("onSearch")) {
             String search = args.getString(0);
             TalkingDataAppCpa.onSearch(getSearch(search));
