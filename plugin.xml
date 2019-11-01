@@ -15,11 +15,10 @@
     <js-module src="www/TDShoppingCart.js" name="TDShoppingCart">
         <clobbers target="TDShoppingCart" />
     </js-module>
-        <js-module src="www/TDTransaction.js" name="TDTransaction">
+    <js-module src="www/TDTransaction.js" name="TDTransaction">
         <clobbers target="TDTransaction" />
     </js-module>
-    </js-module>
-        <js-module src="www/TDSearch.js" name="TDSearch">
+    <js-module src="www/TDSearch.js" name="TDSearch">
         <clobbers target="TDSearch" />
     </js-module>
     
