@@ -2,6 +2,7 @@ package com.talkingdata.adtracking;
 
 import android.content.Context;
 import android.text.TextUtils;
+import com.tendcloud.appcpa.TDSearch;
 
 import com.tendcloud.appcpa.Order;
 import com.tendcloud.appcpa.ShoppingCart;
@@ -54,7 +55,12 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
         } else if ("onRegister".equals(action)) {
             // 注册事件
             String accountId = args.getString(0);
-            TalkingDataAppCpa.onRegister(accountId);
+            if(args.length() == 1) {
+                TalkingDataAppCpa.onRegister(accountId);
+            }else if(args.length() == 2) {
+                String invitationCode = args.getString(1);
+                TalkingDataAppCpa.onRegister(accountId, invitationCode);
+            }
             return true;
         } else if ("onLogin".equals(action)) {
             // 登录事件
@@ -126,6 +132,10 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
+        } else if (action.startsWith("onSearch")) {
+            String search = args.getString(0);
+            TalkingDataAppCpa.onSearch(getSearch(search));
+            return true;
         } else if (action.startsWith("onTransaction")) {
             String accountId = args.getString(0);
             String transaction = args.getString(1);
@@ -288,5 +298,27 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             e.printStackTrace();
         }
         return tdTransaction;
+    }
+
+    private TDSearch getSearch(String json){
+        TDSearch tdSearch = TDSearch.createAdSearch();
+        try{
+            JSONObject jsonObject = new JSONObject(json);
+            tdSearch.setCategory(jsonObject.optString("category", null));
+            tdSearch.setContent(jsonObject.optString("content", null));
+            tdSearch.setItemId(jsonObject.optString("itemId", null));
+            tdSearch.setItemLocationId(jsonObject.optString("itemLocationId", null));
+            tdSearch.setDestination(jsonObject.optString("destination", null));
+            tdSearch.setOrigin(jsonObject.optString("origin", null));
+            if (jsonObject.has("startDate")){
+                tdSearch.setStartDate(jsonObject.optLong("startDate", 0));
+            }
+            if (jsonObject.has("endDate")){
+                tdSearch.setEndDate(jsonObject.optLong("endDate", 0));
+            }
+        }catch (Throwable t){
+            t.printStackTrace();
+        }
+        return tdSearch;
     }
 }

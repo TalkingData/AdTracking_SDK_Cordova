@@ -28,8 +28,8 @@ var TalkingDataAppCpa = {
 
     // 注册事件
     // accountId    : 帐户ID
-    onRegister:function(accountId) {
-        exec(null, null, "TalkingDataAppCpa", "onRegister", [accountId]);
+    onRegister:function(accountId, invitationCode) {
+        exec(null, null, "TalkingDataAppCpa", "onRegister", [accountId, invitationCode]);
     },
 
     // 登录事件
@@ -146,6 +146,14 @@ var TalkingDataAppCpa = {
     // 触发自定义事件10
     onCustEvent10: function() {
         exec(null, null, "TalkingDataAppCpa", "onCustEvent10", []);
+    },
+
+    onCreateCard: function(accountId, method, content){
+        exec(null, null, "TalkingDataAppCpa", "onCreateCard", [accountId, method, content]);
+    },
+
+    onSearch: function(search){
+        exec(null, null,  "TalkingDataAppCpa", "onSearch", [search]);
     },
 
     /**
