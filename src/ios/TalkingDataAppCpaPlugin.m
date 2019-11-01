@@ -66,6 +66,24 @@
     [TalkingDataAppCpa onLogin:accountId];
 }
 
+
+- (void)onCreateCard:(CDVInvokedUrlCommand*)command {
+    NSString *account = [command.arguments objectAtIndex:0];
+    if (![account isKindOfClass:[NSString class]]) {
+        account == nil;
+    }
+    NSString *method = [command.arguments objectAtIndex:1];
+    if (![method isKindOfClass:[NSString class]]) {
+        method == nil;
+    }
+    NSString *content = [command.arguments objectAtIndex:2];
+    if (![content isKindOfClass:[NSString class]]) {
+        content == nil;
+    }
+    [TalkingDataAppCpa onCreateCard:account method:method content:content];
+}
+
+
 - (void)onCreateRole:(CDVInvokedUrlCommand*)command {
     NSString *roleName = [command.arguments objectAtIndex:0];
     if (![roleName isKindOfClass:[NSString class]]) {
