@@ -275,7 +275,7 @@
     search.origin = transactionDict[@"origin"];
     search.startDate = [transactionDict[@"startDate"] intValue];
     search.endDate = [transactionDict[@"endDate"] intValue];
-    return transaction;
+    return search;
 }
 
 
