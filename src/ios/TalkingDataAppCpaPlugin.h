@@ -12,11 +12,7 @@
 
 @interface TalkingDataAppCpaPlugin : CDVPlugin
 
-// 初始化 TalkingData Analytics SDK
-// command 中的值：
-// appId        : TalkingData appId
-// channelId    : 渠道号
-- (void)init:(CDVInvokedUrlCommand*)command;
+
 
 // 关闭在控制台中打印运行时日志
 - (void)setVerboseLogDisable:(CDVInvokedUrlCommand*)command;

@@ -2,12 +2,6 @@ var exec = require('cordova/exec');
 
 var TalkingDataAppCpa = {
 
-    // 初始化 TalkingData AdTracking SDK
-    // appId        : TalkingData appId
-    // channelId    : 渠道号
-    init:function(appId, channelId) {
-        exec(null, null, "TalkingDataAppCpa", "init", [appId, channelId]);
-    },
 
     // 关闭在控制台中打印运行时日志
     setVerboseLogDisable:function() {

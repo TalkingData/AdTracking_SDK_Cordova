@@ -12,24 +12,7 @@
 
 @implementation TalkingDataAppCpaPlugin
 
-- (void)init:(CDVInvokedUrlCommand*)command {
-    NSString *appId = [command.arguments objectAtIndex:0];
-    if (appId == nil || [appId isKindOfClass:[NSNull class]]) {
-        return;
-    }
-    NSString *channelId = [command.arguments objectAtIndex:1];
-    if ([channelId isKindOfClass:[NSNull class]]) {
-        channelId = nil;
-    }
-    NSString * customString = nil;
-    if (command.arguments.count >= 3) {
-        customString = [command.arguments objectAtIndex:2];
-        if (![customString isKindOfClass:[NSString class]]) {
-            customString == nil;
-        }
-    }
-    [TalkingDataAppCpa init:appId withChannelId:channelId custom:customString];
-}
+
 
 - (void)setVerboseLogDisable:(CDVInvokedUrlCommand*)command {
     [TalkingDataAppCpa setVerboseLogDisabled];
