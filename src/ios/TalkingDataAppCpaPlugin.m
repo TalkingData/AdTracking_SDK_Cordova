@@ -508,7 +508,7 @@
 }
 
 
-- (void)onTrailFinished:(CDVInvokedUrlCommand*)command
+- (void)onTrialFinished:(CDVInvokedUrlCommand*)command
 {
     NSString *accountId = [command.arguments objectAtIndex:0];
     if (![accountId isKindOfClass:[NSString class]]) {

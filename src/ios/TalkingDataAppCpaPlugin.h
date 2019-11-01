@@ -161,7 +161,7 @@
 - (void)onChargeBack:(CDVInvokedUrlCommand*)command;
 
 //专属-完成使用体验
-- (void)onTrailFinished:(CDVInvokedUrlCommand*)command;
+- (void)onTrialFinished:(CDVInvokedUrlCommand*)command;
 
 //完成新手教程
 - (void)onGuideFinished:(CDVInvokedUrlCommand*)command;
