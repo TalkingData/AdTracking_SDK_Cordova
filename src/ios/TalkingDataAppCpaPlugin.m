@@ -261,6 +261,7 @@
     search.category = transactionDict[@"category"];
     search.content = transactionDict[@"content"];
     search.itemLocationId = transactionDict[@"itemLocationId"];
+    search.itemId = transactionDict[@"itemId"];
     search.destination = transactionDict[@"destination"];
     search.origin = transactionDict[@"origin"];
     search.startDate = [transactionDict[@"startDate"] intValue];
