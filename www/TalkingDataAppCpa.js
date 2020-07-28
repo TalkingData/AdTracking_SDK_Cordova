@@ -14,6 +14,12 @@ var TalkingDataAppCpa = {
         exec(callBack, null, "TalkingDataAppCpa", "getDeviceId", []);
     },
 
+    // 获取 OAID，并将其作为参数传入 JS 的回调函数
+    // callBack     : 处理 OAID 的回调函数
+    getOAID:function(callBack) {
+        exec(callBack, null, "TalkingDataAppCpa", "getOAID", []);
+    },
+
     // DeepLink事件
     // link         : 链接
     onReceiveDeepLink: function(link) {

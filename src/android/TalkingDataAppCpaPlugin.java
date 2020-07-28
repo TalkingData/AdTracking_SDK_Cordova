@@ -41,6 +41,11 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             String deviceId = TalkingDataAppCpa.getDeviceId(ctx);
             callbackContext.success(deviceId);
             return true;
+        } else if ("getOAID".equals(action)) {
+            // 获取 OAID，并将其作为参数传入 JS 的回调函数
+            String oaid = TalkingDataAppCpa.getOAID(ctx);
+            callbackContext.success(oaid);
+            return true;
         } else if ("onReceiveDeepLink".equals(action)) {
             // DeepLink事件
             String link = args.getString(0);
