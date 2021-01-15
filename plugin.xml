@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="cordova-plugin-talkingdata-adtracking" 
-        version="1.0.0">
+        id="talkingdata-adtracking" 
+        version="4.0.12">
     
     <name>TalkingData-AdTracking</name>
     
     <js-module src="www/TalkingDataAppCpa.js" name="TalkingDataAppCpa">
         <clobbers target="TalkingDataAppCpa" />
+    </js-module>
+    <js-module src="www/TDSearch.js" name="TDSearch">
+        <clobbers target="TDSearch" />
     </js-module>
     <js-module src="www/TDOrder.js" name="TDOrder">
         <clobbers target="TDOrder" />
@@ -18,40 +21,10 @@
     <js-module src="www/TDTransaction.js" name="TDTransaction">
         <clobbers target="TDTransaction" />
     </js-module>
-    <js-module src="www/TDSearch.js" name="TDSearch">
-        <clobbers target="TDSearch" />
-    </js-module>
     
-    <!-- ios -->
-    <platform name="ios">
-    
-        <header-file src="src/ios/TalkingDataAppCpaPlugin.h" />
-        <source-file src="src/ios/TalkingDataAppCpaPlugin.m" />
-        <header-file src="src/ios/TalkingDataAppCpa.h" />
-        <source-file src="src/ios/libTalkingDataAppCpa.a" framework="true" />
-        
-        <config-file target="config.xml" parent="/widget/plugins">
-            <feature name="TalkingDataAppCpa">
-                <param name="ios-package" value="TalkingDataAppCpaPlugin"/>
-            </feature>
-        </config-file>
-        
-        <framework src="CoreMotion.framework" />
-        <framework src="SystemConfiguration.framework" />
-        <framework src="Security.framework" />
-        <framework src="CFNetwork.framework" />
-        <framework src="CoreTelephony.framework" />
-        <framework src="AdSupport.framework" />
-        <framework src="libz.tbd" />
-        <framework src="libc++.tbd" />
-        
-    </platform>
-    
-    <!-- android -->
     <platform name="android">
-        
-        <source-file src="src/android/AdTracking.jar" target-dir="libs" />
         <source-file src="src/android/TalkingDataAppCpaPlugin.java" target-dir="src/com/talkingdata/adtracking" />
+        <source-file src="src/android/AdTracking.jar" target-dir="libs" />
         
         <config-file target="res/xml/config.xml" parent="/widget/plugins">
             <feature name="TalkingDataAppCpa">
@@ -64,12 +37,32 @@
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             <uses-permission android:name="android.permission.READ_PHONE_STATE" />
             <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.GET_TASKS" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         </config-file>
-        
     </platform>
     
+    <platform name="ios">
+        <header-file src="src/ios/TalkingDataAppCpaPlugin.h" />
+        <source-file src="src/ios/TalkingDataAppCpaPlugin.m" />
+        <header-file src="src/ios/TalkingDataAppCpa.h" />
+        <source-file src="src/ios/libTalkingDataAppCpa.a" framework="true" />
+        
+        <config-file target="config.xml" parent="/widget/plugins">
+            <feature name="TalkingDataAppCpa">
+                <param name="ios-package" value="TalkingDataAppCpaPlugin"/>
+            </feature>
+        </config-file>
+        
+        <framework src="AdSupport.framework" />
+        <framework src="CoreMotion.framework" />
+        <framework src="CoreTelephony.framework" />
+        <framework src="Security.framework" />
+        <framework src="SystemConfiguration.framework" />
+        <framework src="libc++.tbd" />
+        <framework src="libz.tbd" />
+    </platform>
 </plugin>

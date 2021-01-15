@@ -33,70 +33,91 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if ("setVerboseLogDisable".equals(action)) {
-            // 关闭在LogCat中打印运行日志
             TalkingDataAppCpa.setVerboseLogDisable();
             return true;
         } else if ("getDeviceId".equals(action)) {
-            // 获取 TalkingData Device Id，并将其作为参数传入 JS 的回调函数
             String deviceId = TalkingDataAppCpa.getDeviceId(ctx);
             callbackContext.success(deviceId);
             return true;
         } else if ("getOAID".equals(action)) {
-            // 获取 OAID，并将其作为参数传入 JS 的回调函数
             String oaid = TalkingDataAppCpa.getOAID(ctx);
             callbackContext.success(oaid);
             return true;
+        } else if ("onRegister".equals(action)) {
+            String profileId = args.getString(0);
+            String invitationCode = args.getString(1);
+            TalkingDataAppCpa.onRegister(profileId, invitationCode);
+            return true;
+        } else if ("onLogin".equals(action)) {
+            String profileId = args.getString(0);
+            TalkingDataAppCpa.onLogin(profileId);
+            return true;
+        } else if (action.startsWith("onCreateCard")) {
+            String profileId = args.getString(0);
+            String method = args.getString(1);
+            String content = args.getString(2);
+            TalkingDataAppCpa.onCreateCard(profileId, method, content);
+            return true;
         } else if ("onReceiveDeepLink".equals(action)) {
-            // DeepLink事件
             String link = args.getString(0);
             TalkingDataAppCpa.onReceiveDeepLink(link);
             return true;
-        } else if ("onRegister".equals(action)) {
-            // 注册事件
-            String accountId = args.getString(0);
-            if(args.length() == 1) {
-                TalkingDataAppCpa.onRegister(accountId);
-            }else if(args.length() == 2) {
-                String invitationCode = args.getString(1);
-                TalkingDataAppCpa.onRegister(accountId, invitationCode);
-            }
+        } else if (action.startsWith("onFavorite")) {
+            String category = args.getString(0);
+            String content = args.getString(1);
+            TalkingDataAppCpa.onFavorite(category, content);
             return true;
-        } else if ("onLogin".equals(action)) {
-            // 登录事件
-            String accountId = args.getString(0);
-            TalkingDataAppCpa.onLogin(accountId);
+        } else if (action.startsWith("onShare")) {
+            String profileId = args.getString(0);
+            String content = args.getString(1);
+            TalkingDataAppCpa.onShare(profileId, content);
             return true;
-        } else if ("onCreateRole".equals(action)) {
-            // 创建角色
-            String roleName = args.getString(0);
-            TalkingDataAppCpa.onCreateRole(roleName);
+        } else if (action.startsWith("onPunch")) {
+            String profileId = args.getString(0);
+            String punchId  = args.getString(1);
+            TalkingDataAppCpa.onPunch(profileId, punchId);
+            return true;
+        } else if (action.startsWith("onSearch")) {
+            String search = args.getString(0);
+            TalkingDataAppCpa.onSearch(stringToSearch(search));
+            return true;
+        } else if (action.startsWith("onContact")) {
+            String profileId = args.getString(0);
+            String content = args.getString(1);
+            TalkingDataAppCpa.onContact(profileId, content);
             return true;
         } else if ("onPay".equals(action)) {
-            // 支付
-            String accountId = args.getString(0);
+            String profileId = args.getString(0);
             String orderId = args.getString(1);
             int amount = args.getInt(2);
             String currencyType = args.getString(3);
             String payType = args.getString(4);
-            TalkingDataAppCpa.onPay(accountId, orderId, amount, currencyType, payType);
-        } else if ("onPlaceOrder".equals(action)) {
-            // 下单
-            String accountId = args.getString(0);
-            String orderStr = args.getString(1);
-            Order order = this.stringToOrder(orderStr);
-            TalkingDataAppCpa.onPlaceOrder(accountId, order);
+            TalkingDataAppCpa.onPay(profileId, orderId, amount, currencyType, payType);
             return true;
-        } else if ("onOrderPaySucc".equals(action)) {
-            // 支付订单
-            String accountId = args.getString(0);
+        } else if (action.startsWith("onChargeBack")) {
+            String profileId = args.getString(0);
             String orderId = args.getString(1);
-            int amount = args.getInt(2);
-            String currencyType = args.getString(3);
-            String payType = args.getString(4);
-            TalkingDataAppCpa.onOrderPaySucc(accountId, orderId, amount, currencyType, payType);
+            String reason = args.getString(2);
+            String type = args.getString(3);
+            TalkingDataAppCpa.onChargeBack(profileId, orderId, reason, type);
+            return true;
+        } else if (action.startsWith("onReservation")) {
+            String profileId = args.getString(0);
+            String reservationId = args.getString(1);
+            String category = args.getString(2);
+            int amount = args.getInt(3);
+            String term = args.getString(4);
+            TalkingDataAppCpa.onReservation(profileId, reservationId, category, amount, term);
+            return true;
+        } else if (action.startsWith("onBooking")) {
+            String profileId = args.getString(0);
+            String bookingId = args.getString(1);
+            String category = args.getString(2);
+            int amount = args.getInt(3);
+            String content = args.getString(4);
+            TalkingDataAppCpa.onBooking(profileId, bookingId, category, amount, content);
             return true;
         } else if ("onViewItem".equals(action)) {
-            // 查看商品
             String itemId = args.getString(0);
             String category = args.getString(1);
             String name = args.getString(2);
@@ -104,7 +125,6 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             TalkingDataAppCpa.onViewItem(itemId, category, name, unitPrice);
             return true;
         } else if ("onAddItemToShoppingCart".equals(action)) {
-            // 添加商品到购物车
             String itemId = args.getString(0);
             String category = args.getString(1);
             String name = args.getString(2);
@@ -113,13 +133,91 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             TalkingDataAppCpa.onAddItemToShoppingCart(itemId, category, name, unitPrice, amount);
             return true;
         } else if ("onViewShoppingCart".equals(action)) {
-            // 查看购物车
             String shoppingCartStr = args.getString(0);
             ShoppingCart shoppingCart = this.stringToShoppingCart(shoppingCartStr);
             TalkingDataAppCpa.onViewShoppingCart(shoppingCart);
             return true;
+        } else if ("onPlaceOrder".equals(action)) {
+            String profileId = args.getString(0);
+            String orderStr = args.getString(1);
+            Order order = this.stringToOrder(orderStr);
+            TalkingDataAppCpa.onPlaceOrder(profileId, order);
+            return true;
+        } else if ("onOrderPaySucc".equals(action)) {
+            String profileId = args.getString(0);
+            String orderId = args.getString(1);
+            int amount = args.getInt(2);
+            String currencyType = args.getString(3);
+            String payType = args.getString(4);
+            TalkingDataAppCpa.onOrderPaySucc(profileId, orderId, amount, currencyType, payType);
+            return true;
+        } else if (action.startsWith("onCredit")) {
+            String profileId = args.getString(0);
+            int amount = args.getInt(1);
+            String content = args.getString(2);
+            TalkingDataAppCpa.onCredit(profileId, amount, content);
+            return true;
+        } else if (action.startsWith("onTransaction")) {
+            String profileId = args.getString(0);
+            String transaction = args.getString(1);
+            TalkingDataAppCpa.onTransaction(profileId, stringToTransaction(transaction));
+            return true;
+        } else if ("onCreateRole".equals(action)) {
+            String roleName = args.getString(0);
+            TalkingDataAppCpa.onCreateRole(roleName);
+            return true;
+        } else if (action.startsWith("onLevelPass")) {
+            String profileId = args.getString(0);
+            String levelId = args.getString(1);
+            TalkingDataAppCpa.onLevelPass(profileId, levelId);
+            return true;
+        } else if (action.startsWith("onGuideFinished")) {
+            String profileId = args.getString(0);
+            String content = args.getString(1);
+            TalkingDataAppCpa.onGuideFinished(profileId, content);
+            return true;
+        } else if (action.startsWith("onLearn")) {
+            String profileId = args.getString(0);
+            String course = args.getString(1);
+            long begin = args.getLong(2);
+            int duration = args.getInt(3);
+            TalkingDataAppCpa.onLearn(profileId, course, begin, duration);
+            return true;
+        } else if (action.startsWith("onPreviewFinished")) {
+            String profileId = args.getString(0);
+            String content = args.getString(1);
+            TalkingDataAppCpa.onPreviewFinished(profileId, content);
+            return true;
+        } else if (action.startsWith("onRead")) {
+            String profileId = args.getString(0);
+            String book = args.getString(1);
+            long begin = args.getLong(2);
+            int duration = args.getInt(3);
+            TalkingDataAppCpa.onRead(profileId, book, begin, duration);
+            return true;
+        } else if (action.startsWith("onFreeFinished")) {
+            String profileId = args.getString(0);
+            String content = args.getString(1);
+            TalkingDataAppCpa.onFreeFinished(profileId, content);
+            return true;
+        } else if (action.startsWith("onAchievementUnlock")) {
+            String profileId = args.getString(0);
+            String achievementId = args.getString(1);
+            TalkingDataAppCpa.onAchievementUnlock(profileId, achievementId);
+            return true;
+        } else if (action.startsWith("onBrowse")) {
+            String profileId = args.getString(0);
+            String content = args.getString(1);
+            long begin = args.getLong(2);
+            int duration = args.getInt(3);
+            TalkingDataAppCpa.onBrowse(profileId, content, begin, duration);
+            return true;
+        } else if (action.startsWith("onTrialFinished")) {
+            String profileId = args.getString(0);
+            String content = args.getString(1);
+            TalkingDataAppCpa.onTrialFinished(profileId, content);
+            return true;
         } else if (action.startsWith("onCustEvent")) {
-            // 触发自定义事件
             try {
                 Method onCustEvent = TalkingDataAppCpa.class.getDeclaredMethod(action);
                 onCustEvent.invoke(null);
@@ -131,123 +229,31 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-        } else if (action.startsWith("onCreateCard")){
-            String accountId = args.getString(0);
-            String method = args.getString(1);
-            String content = args.getString(2);
-            TalkingDataAppCpa.onCreateCard(accountId, method, content);
-            return true;
-        } else if (action.startsWith("onSearch")) {
-            String search = args.getString(0);
-            TalkingDataAppCpa.onSearch(getSearch(search));
-            return true;
-        } else if (action.startsWith("onTransaction")) {
-            String accountId = args.getString(0);
-            String transaction = args.getString(1);
-            TalkingDataAppCpa.onTransaction(accountId, stringToTransaction(transaction));
-            return true;
-        } else if (action.startsWith("onCredit")) {
-            String accountId = args.getString(0);
-            int amount = args.getInt(1);
-            String content = args.getString(2);
-            TalkingDataAppCpa.onCredit(accountId, amount, content);
-            return true;
-        } else if (action.startsWith("onFavorite")) {
-            String category = args.getString(0);
-            String content = args.getString(1);
-            TalkingDataAppCpa.onFavorite(category, content);
-            return true;
-        } else if (action.startsWith("onShare")) {
-            String accountId = args.getString(0);
-            String content = args.getString(1);
-            TalkingDataAppCpa.onShare(accountId, content);
-            return true;
-        } else if (action.startsWith("onPunch")) {
-            String accountId = args.getString(0);
-            String punchId  = args.getString(1);
-            TalkingDataAppCpa.onPunch(accountId, punchId);
-            return true;
-        } else if (action.startsWith("onReservation")) {
-            String accountId = args.getString(0);
-            String reservationId = args.getString(1);
-            String category = args.getString(2);
-            int amount = args.getInt(3);
-            String term = args.getString(4);
-            TalkingDataAppCpa.onReservation(accountId, reservationId, category, amount, term);
-            return true;
-        } else if (action.startsWith("onBooking")) {
-            String accountId = args.getString(0);
-            String bookingId = args.getString(1);
-            String category = args.getString(2);
-            int amount = args.getInt(3);
-            String content = args.getString(4);
-            TalkingDataAppCpa.onBooking(accountId, bookingId, category, amount, content);
-            return true;
-        } else if (action.startsWith("onContact")) {
-            String accountId = args.getString(0);
-            String content = args.getString(1);
-            TalkingDataAppCpa.onContact(accountId, content);
-            return true;
-        } else if (action.startsWith("onLearn")) {
-            String accountId = args.getString(0);
-            String course = args.getString(1);
-            long begin = args.getLong(2);
-            int duration = args.getInt(3);
-            TalkingDataAppCpa.onLearn(accountId, course, begin, duration);
-            return true;
-        } else if (action.startsWith("onRead")) {
-            String accountId = args.getString(0);
-            String book = args.getString(1);
-            long begin = args.getLong(2);
-            int duration = args.getInt(3);
-            TalkingDataAppCpa.onRead(accountId, book, begin, duration);
-            return true;
-        } else if (action.startsWith("onBrowse")) {
-            String accountId = args.getString(0);
-            String content = args.getString(1);
-            long begin = args.getLong(2);
-            int duration = args.getInt(3);
-            TalkingDataAppCpa.onBrowse(accountId, content, begin, duration);
-            return true;
-        } else if (action.startsWith("onChargeBack")) {
-            String accountId = args.getString(0);
-            String orderId = args.getString(1);
-            String reason = args.getString(2);
-            String type = args.getString(3);
-            TalkingDataAppCpa.onChargeBack(accountId, orderId, reason, type);
-            return true;
-        } else if (action.startsWith("onTrialFinished")) {
-            String accountId = args.getString(0);
-            String content = args.getString(1);
-            TalkingDataAppCpa.onTrialFinished(accountId, content);
-            return true;
-        } else if (action.startsWith("onGuideFinished")) {
-            String accountId = args.getString(0);
-            String content = args.getString(1);
-            TalkingDataAppCpa.onGuideFinished(accountId, content);
-            return true;
-        }else if (action.startsWith("onPreviewFinished")) {
-            String accountId = args.getString(0);
-            String content = args.getString(1);
-            TalkingDataAppCpa.onPreviewFinished(accountId, content);
-            return true;
-        }else if (action.startsWith("onFreeFinished")) {
-            String accountId = args.getString(0);
-            String content = args.getString(1);
-            TalkingDataAppCpa.onFreeFinished(accountId, content);
-            return true;
-        }else if (action.startsWith("onLevelPass")) {
-            String accountId = args.getString(0);
-            String levelId = args.getString(1);
-            TalkingDataAppCpa.onLevelPass(accountId, levelId);
-            return true;
-        }else if (action.startsWith("onAchievementUnlock")) {
-            String accountId = args.getString(0);
-            String achievementId = args.getString(1);
-            TalkingDataAppCpa.onAchievementUnlock(accountId, achievementId);
-            return true;
         }
         return false;
+    }
+
+    private TDSearch stringToSearch(String json) {
+        try {
+            JSONObject searchJson = new JSONObject(json);
+            TDSearch search = TDSearch.createAdSearch();
+            search.setCategory(searchJson.optString("category", null));
+            search.setContent(searchJson.optString("content", null));
+            search.setItemId(searchJson.optString("itemId", null));
+            search.setItemLocationId(searchJson.optString("itemLocationId", null));
+            search.setDestination(searchJson.optString("destination", null));
+            search.setOrigin(searchJson.optString("origin", null));
+            if (searchJson.has("startDate")) {
+                search.setStartDate(searchJson.optLong("startDate", 0));
+            }
+            if (searchJson.has("endDate")) {
+                search.setEndDate(searchJson.optLong("endDate", 0));
+            }
+            return search;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private Order stringToOrder(String orderStr) {
@@ -260,7 +266,7 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
                 order.addItem(item.getString("itemId"), item.getString("category"), item.getString("name"), item.getInt("unitPrice"), item.getInt("amount"));
             }
             return order;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -276,54 +282,29 @@ public class TalkingDataAppCpaPlugin extends CordovaPlugin {
                 shoppingCart.addItem(item.getString("itemId"), item.getString("category"), item.getString("name"), item.getInt("unitPrice"), item.getInt("amount"));
             }
             return shoppingCart;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
     private TDTransaction stringToTransaction(String json) {
-        TDTransaction tdTransaction = TDTransaction.createTDTransaction();
-        if (TextUtils.isEmpty(json)) {
-            return tdTransaction;
-        }
         try {
-            JSONObject jsonObject = new JSONObject(json);
-            tdTransaction.setTransactionId(jsonObject.optString("transactionId", null))
-                    .setCategory(jsonObject.optString("category", null))
-                    .setAmount(jsonObject.optInt("amount", 0))
-                    .setPersonA(jsonObject.optString("personA", null))
-                    .setPersonB(jsonObject.optString("personB", null))
-                    .setStartDate(jsonObject.optLong("startDate", 0))
-                    .setEndDate(jsonObject.optLong("endDate", 0))
-                    .setContent(jsonObject.optString("content", null))
-                    .setCurrencyType(jsonObject.optString("currencyType", null));
-
+            JSONObject transactionJson = new JSONObject(json);
+            TDTransaction transaction = TDTransaction.createTDTransaction();
+            transaction.setTransactionId(transactionJson.optString("transactionId", null));
+            transaction.setCategory(transactionJson.optString("category", null));
+            transaction.setAmount(transactionJson.optInt("amount", 0));
+            transaction.setPersonA(transactionJson.optString("personA", null));
+            transaction.setPersonB(transactionJson.optString("personB", null));
+            transaction.setStartDate(transactionJson.optLong("startDate", 0));
+            transaction.setEndDate(transactionJson.optLong("endDate", 0));
+            transaction.setContent(transactionJson.optString("content", null));
+            transaction.setCurrencyType(transactionJson.optString("currencyType", null));
+            return transaction;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return tdTransaction;
-    }
-
-    private TDSearch getSearch(String json){
-        TDSearch tdSearch = TDSearch.createAdSearch();
-        try{
-            JSONObject jsonObject = new JSONObject(json);
-            tdSearch.setCategory(jsonObject.optString("category", null));
-            tdSearch.setContent(jsonObject.optString("content", null));
-            tdSearch.setItemId(jsonObject.optString("itemId", null));
-            tdSearch.setItemLocationId(jsonObject.optString("itemLocationId", null));
-            tdSearch.setDestination(jsonObject.optString("destination", null));
-            tdSearch.setOrigin(jsonObject.optString("origin", null));
-            if (jsonObject.has("startDate")){
-                tdSearch.setStartDate(jsonObject.optLong("startDate", 0));
-            }
-            if (jsonObject.has("endDate")){
-                tdSearch.setEndDate(jsonObject.optLong("endDate", 0));
-            }
-        }catch (Throwable t){
-            t.printStackTrace();
-        }
-        return tdSearch;
+        return null;
     }
 }

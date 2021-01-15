@@ -1,6 +1,6 @@
 {
-  "name": "cordova-plugin-talkingdata-adtracking",
-  "version": "1.0.0",
+  "name": "talkingdata-adtracking",
+  "version": "4.0.12",
   "description": "TalkingData Ad-Tracking SDK cordova plugin.",
   "main": "TalkingDataAppCpa.js",
   "scripts": {
@@ -12,9 +12,9 @@
   },
   "keywords": [
     "TalkingData",
-    "cordova-plugin-talkingdata-adtracking"
+    "Tracking"
   ],
-  "author": "xiaofei",
+  "author": "TalkingData",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/TalkingData/AdTracking_SDK_Cordova/issues"
